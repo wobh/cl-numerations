@@ -1,7 +1,8 @@
 (defpackage #:oxxo
   (:use #:cl)
-  (:export #:digit-oxxo-p #:logbitox
+  (:export #:digit-oxxo-p 
            #:parse-ox #:parse-xo
+           #:logbit-oxxo
            #:write-ox #:write-xo)
   (:documentation "Functions to write and parse binary numbers where o = 0, x = 1.
 
@@ -42,7 +43,7 @@
             :start start
             :end end)))
 
-(defun logbitox (index integer)
+(defun logbit-oxxo (index integer)
   "Returns `ox' bit char at index position of integer."
   (char "ox" (ldb (byte 1 index) integer)))
 
@@ -52,7 +53,7 @@
   (with-output-to-string (ret-stream)
     (with-open-stream (bcast (make-broadcast-stream ret-stream out-stream))
       (dotimes (index (integer-length pos-integer))
-        (princ (logbitox index pos-integer) bcast)))))
+        (princ (logbit-oxxo index pos-integer) bcast)))))
 
 (defun write-xo (pos-integer &key (out-stream *standard-output*))
   "Writes number as `xo', a binary MSB ordered numeration: o = 0, x = 1."
@@ -61,7 +62,7 @@
     (with-open-stream (bcast (make-broadcast-stream ret-stream out-stream))
       (loop
          for index from (1- (integer-length pos-integer)) downto 0
-         do (princ (logbitox index pos-integer) bcast)))))
+         do (princ (logbit-oxxo index pos-integer) bcast)))))
 
 #+oxxo-test
 (labels ((string-maybe= (string1 string2)
