@@ -13,8 +13,7 @@
 
 (defun digit-oxxo-p (character)
   "Identify digits in binary numeration: o = 0, x = 1."
-  (cond ((char-equal #\o character) 0)
-        ((char-equal #\x character) 1)))
+  (position character "ox" :test #'char-equal))
 
 (defun parse-ox (ox-string &key (start 0) end)
   "Parses `ox' numerals, a binary, LSB ordered numeration: o = 0, x = 1."
